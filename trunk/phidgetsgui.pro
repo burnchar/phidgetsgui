@@ -22,3 +22,11 @@ HEADERS += mainwindow.h \
     logthread.h
 FORMS += mainwindow.ui
 LIBS += -lphidget21 -luser32 # -lFreeTrackClient
+
+CONFIG += static
+
+static {
+	DEFINES += STATIC
+#	QTPLUGIN += qjpeg qgif  # Statically link image format support
+	message("Static build.")
+}
