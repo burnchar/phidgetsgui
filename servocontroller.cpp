@@ -24,8 +24,8 @@ ServoController::ServoController(int servos, int PhidgetID)
 		qDebug() << deviceType << serialNumber << version << numServosMax;
 	}
 	else {
-		qDebug() << "Could not attach to servo controller. Exiting.";
-		exit(1);
+		qDebug() << "Could not attach to servo controller.";
+		//exit(1);
 	}
 }
 
@@ -59,7 +59,7 @@ bool ServoController::setAttachController(int PhidgetID, int waitms)
 	if(lastErrorCode) {
 		CPhidget_getErrorDescription(lastErrorCode, &lastErrorDescription);
 		
-		QString errorMsg = QString("I tried connecting to the servo controller, but it didn't work out. The Phidgets API said: %1").arg(lastErrorDescription);
+		QString errorMsg = QString("I tried connecting to the servo controller, but it didn't work out.\nThe Phidgets API said: %1").arg(lastErrorDescription);
 		qDebug() << errorMsg;
 		QMessageBox msgBox;
 		msgBox.setText(errorMsg);
