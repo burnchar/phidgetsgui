@@ -21,12 +21,29 @@ HEADERS += mainwindow.h \
     hmd.h \
     logthread.h
 FORMS += mainwindow.ui
-LIBS += -lphidget21 -luser32 # -lFreeTrackClient
 
-CONFIG += static
+message($$QMAKESPEC)
+LIBS += -luser32
+
+# For all Microsoft compilers
+!win32-g++ {
+	LIBS += -lphidget21
+}
+
+# G++ wants the library specified differently than MSVC
+win32-g++ {
+	LIBS += -l:phidget21.lib
+}
+
+
+!win32 {
+	message("Only Windows is supported due to dependencies.")
+}
+
+# If doing a static build (no dependencies) with a statically compiled Qt:
+#CONFIG += static
 
 static {
 	DEFINES += STATIC
-#	QTPLUGIN += qjpeg qgif  # Statically link image format support
 	message("Static build.")
 }
