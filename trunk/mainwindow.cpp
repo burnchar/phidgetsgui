@@ -14,10 +14,10 @@
   but this didn't work. Some servos would have needed as much as a 40% tolerance
   to input values, even though the actual range across the small input range was
   the same about 180 degrees.
-  
+
   The window can potentially be resized to any size, to angles for the Z display
   are derived from the exact widget positions relative to each other.
-  
+
   */
 
 #include "mainwindow.h"
@@ -41,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent)
 	this->createStatusBar();
 	this->sessionActive = false;
 	this->sessionPaused = false;
-	
+
 	mainTimer.start(); // Used in LogThread class
 }
 
@@ -52,7 +52,7 @@ void MainWindow::connectEvents()
 {
 	connect(timer, SIGNAL(timeout()), this, SLOT(updateSessionElapsedTime()));
 	connect(qApp, SIGNAL(aboutToQuit()), SLOT(cleanUpBeforeExit()));
-	
+
 	connect(ui->btnNewSession, SIGNAL(clicked()), SLOT(newSession()));
 	connect(ui->btnFinalizeSession, SIGNAL(clicked()), SLOT(finalizeSession()));
 
@@ -64,12 +64,12 @@ void MainWindow::connectEvents()
 			this, SLOT(onXControlChange(double)));
 	connect(ui->xPositionControl, SIGNAL(valueChanged(double)),
 			ui->lcdXPosition, SLOT(display(double)));
-	
+
 	connect(ui->yPositionSlider, SIGNAL(valueChanged(int)),
 			this, SLOT(setYLcd(int)));
 	connect(ui->yPositionSlider, SIGNAL(valueChanged(int)),
 			this, SLOT(onYControlChange(int)));
-	
+
 	connect(ui->zPositionSlider, SIGNAL(valueChanged(int)),
 			this, SLOT(onZControlChange(int)));
 }
@@ -235,7 +235,7 @@ void MainWindow::finalizeSession()
 		ui->btnPauseTracking->setEnabled(false);
 		ui->btnCalibrate->setEnabled(true);
 		ui->lblStartTime->setText(QDateTime::currentDateTime().toString());
-		
+
 		sessionEndTime = QDateTime::currentDateTime();
 		sessionElapsedTime = sessionStartTime.secsTo(sessionEndTime);
 		QString elapsedSeconds = QString::number((double)sessionElapsedTime);
@@ -269,7 +269,7 @@ void MainWindow::resetControls()
 {
 	ui->xPositionControl->setAngle(0);
 	ui->yPositionSlider->setValue(0);
-	ui->zPositionSlider->setValue(ui->zPositionSlider->maximum());	
+	ui->zPositionSlider->setValue(ui->zPositionSlider->maximum());
 }
 
 
@@ -311,15 +311,15 @@ void MainWindow::onXControlChange(double angle)
 void MainWindow::onYControlChange(int sliderValue)
 {
 	if(ui->radioButton_fromConsole->isChecked() && this->sessionActive) {
-		servos->setAngle(servo_y_index, sliderValue / Y_SLIDER_DIVIDER);
+		servos->setAngle(servo_y_index, -sliderValue / Y_SLIDER_DIVIDER);
 	}
 }
 
 
 //! This slot is called when the Z control is moved.
 //! It calculates the angle which the cameras should face based on a scale.
-//! The scale is between two triangles. The first is formed by the actual 
-//! cameras (which are 6" apart) and the object they are to face. 
+//! The scale is between two triangles. The first is formed by the actual
+//! cameras (which are 6" apart) and the object they are to face.
 //! The second is determined by the GUI's dial widgets (representing cameras)
 //! and the current position of the slider, translated into pixels.
 //! So if the ratio of the dials distance to the distance of the slider is 1:50,
@@ -328,23 +328,25 @@ void MainWindow::onYControlChange(int sliderValue)
 //! @param sliderValue Angle Z control has been moved to.
 void MainWindow::onZControlChange(int sliderValue)
 {
-	static const double RAD_TO_DEG = 57.2957795130823208767981548141; // 180/p
 	QPoint leftDialCenter = ui->zDialLeft->frameGeometry().center();
 	QPoint rightDialCenter = ui->zDialRight->frameGeometry().center();
-	
+
 	// This is to translate the Z slider's value (units) to pixels distance.
 	// This is needed because the slider may have a different range of
 	// output values than its height in number of pixels.
 	double unitsPerPixel = ui->zPositionSlider->height()
 						   / (double)ui->zPositionSlider->maximum();
-	
+
+
+	static const double RAD_TO_DEG = 57.2957795130823208767981548141; // 180/pi
 	// Right triangle setup (adjacent, opposite)
 	double adj = abs(rightDialCenter.x() - leftDialCenter.x()) / 2.0;
 	double opp = (unitsPerPixel * sliderValue) + leftDialCenter.y()
 				 - ui->zPositionSlider->geometry().bottom();
-	double theta = std::atan(opp / adj);
-	
-	int value = Z_DIAL_MULTIPLIER * RAD_TO_DEG * theta;
+	double theta = std::atan(opp / adj) * RAD_TO_DEG; // Theta in degrees
+
+	// Set the little knobs that represent the cameras
+	int value = Z_DIAL_MULTIPLIER * theta;
 	ui->zDialLeft->setValue(Z_DIAL_MULTIPLIER * 270 - value);
 	ui->zDialRight->setValue(Z_DIAL_MULTIPLIER * 90 + value);
 
@@ -352,12 +354,14 @@ void MainWindow::onZControlChange(int sliderValue)
 	int inches = cm / 2.54f;
 	int feet = inches / 12;
 	inches -= (feet * 12);
-	
+
+	// Update the displayed measurements
 	ui->zLabelCentimeters->setText(QString("%1 cm").arg(cm));
 	ui->zLabelFeetInches->setText(QString("%1 ft %2 in").arg(feet).arg(inches));
 
 	if(ui->radioButton_fromConsole->isChecked() && this->sessionActive) {
-		servos->setAngle(2, RAD_TO_DEG * theta);
+		servos->setAngle(servo_w_index, 180.0 - theta);
+		qDebug() <<theta;
 	}
 }
 

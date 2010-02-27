@@ -58,7 +58,7 @@ bool ServoController::setAttachController(int PhidgetID, int waitms)
 
 	if(lastErrorCode) {
 		CPhidget_getErrorDescription(lastErrorCode, &lastErrorDescription);
-		
+
 		QString errorMsg = QString("I tried connecting to the servo controller, but it didn't work out.\nThe Phidgets API said: %1").arg(lastErrorDescription);
 		qDebug() << errorMsg;
 		QMessageBox msgBox;
@@ -90,8 +90,8 @@ void ServoController::initializeServos()
 	for(int servo = 0; servo < numServosAttached; ++servo) {
 		setServoType(servo, servoTypes[servo]);
 		setSpeedRampingEnable(servo);
-		setAccel(servo, getAccelMax(servo) / 32);
-		setVelocity(servo, getVelocityMax(servo) / 2);
+		setAccel(servo, getAccelMax(servo) / 32.0);
+		setVelocity(servo, getVelocityMax(servo) / 3.0);
 	}
 }
 
@@ -118,16 +118,16 @@ void ServoController::centerPositions()
 //! @param angle Input angle
 void ServoController::setAngle(int index, double angle) const
 {
-	double position;
+	double position = 0.0;
 	switch(index) {
 	case 0:	// x servo
-		position = interpolate(angle, -90.0, 90.0, 0.0, 180.0);
+		position = interpolate(angle, -90.0, 90.0, S0MIN, S0MAX);
 		break;
 	case 1: // y servo
 		position = interpolate(angle, -90.0, 90.0, S1MIN, S1MAX);
 		break;
 	case 2: // z servo
-		position = interpolate(angle, -90.0, 90.0, 0.0, 180.0);
+		position = interpolate(angle, -90.0, 90.0, S2MIN, S2MAX);
 		break;
 	}
 	//qDebug() << "Original angle:"<<angle<<"  Interpolated angle:" << position;
