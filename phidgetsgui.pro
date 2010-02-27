@@ -1,7 +1,3 @@
-# -------------------------------------------------
-# Project created by QtCreator 2010-01-31T11:47:45
-# -------------------------------------------------
-QT += sql
 TARGET = phidgetsgui
 TEMPLATE = app
 SOURCES += main.cpp \
@@ -25,6 +21,15 @@ FORMS += mainwindow.ui
 message($$QMAKESPEC)
 LIBS += -luser32
 
+# If doing a static build (no dependencies) with a statically compiled Qt:
+CONFIG += static
+
+static {
+	DEFINES += STATIC
+	message("Static build.")
+}
+
+##########################################################
 # For all Microsoft compilers
 !win32-g++ {
 	LIBS += -lphidget21
@@ -38,12 +43,4 @@ win32-g++ {
 
 !win32 {
 	message("Only Windows is supported due to dependencies.")
-}
-
-# If doing a static build (no dependencies) with a statically compiled Qt:
-#CONFIG += static
-
-static {
-	DEFINES += STATIC
-	message("Static build.")
 }

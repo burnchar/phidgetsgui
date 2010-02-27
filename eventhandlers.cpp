@@ -6,7 +6,7 @@
 	Requirements: Qt 4, Phidgets servo controller & C library (www.phidgets.com)
 	Notes       : Written with Qt Creator. Best viewed with tab width 4.
 	Description : Callback functions from Phidgets API, and friend functions
-	              for their access to other parts of the program.
+				  for their access to other parts of the program.
 */
 
 
@@ -43,13 +43,13 @@ void logGUI(QString message)
 
 
 //! Creates a log entry with information about the last successful servo
-//! movement. 
-//! 
+//! movement.
+//!
 void logActions(int servoIndex, double angle)
 {
 	LogEntry logData;
 	logData.dat.asInt = 0; // Initialize log entry
-	
+
 	if(servoIndex >= 8) {
 		servoIndex = 8;
 		qDebug() << "Servo index <= 8 given. Changed to 8. File:" << __FILE__
@@ -63,7 +63,7 @@ void logActions(int servoIndex, double angle)
 			= (w->ui->radioButton_fromHMD->isChecked() == true ? 1 : 0);
 	logData.dat.asBitfield.msOffset = msSinceLastLogEntry;
 	logData.position = qint32((angle * 1000) + .0005); // Angle as integer
-	
+
 	lock.lockForWrite();
 	 actionLog.enqueue(logData); // Enqueue the event, later used by logThread
 	lock.unlock();
@@ -77,6 +77,8 @@ void logActions(int servoIndex, double angle)
 int __stdcall PositionChangeHandler(CPhidgetAdvancedServoHandle ADVSERVO,
 									void *usrptr, int index, double value)
 {
+
+	qDebug() << "Value from change handler:" << value;
 	CPhidgetAdvancedServoHandle servoControllerHandle = ADVSERVO;
 	servoControllerHandle = 0;
 	usrptr = 0;
@@ -87,7 +89,7 @@ int __stdcall PositionChangeHandler(CPhidgetAdvancedServoHandle ADVSERVO,
 	case 1:
 		updateUiYWidget(value);
 	}
-	
+
 	logActions(index, value);
 
 	return 0;

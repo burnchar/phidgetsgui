@@ -17,8 +17,15 @@
 #include "eventhandlers.h"
 #include "logthread.h"
 
-const double S1MIN = 37.0;
-const double S1MAX = 140.0;
+//const double S1MIN = 37.0;
+//const double S1MAX = 140.0;
+
+const double S0MIN = 0.0;
+const double S0MAX = 180.0;
+const double S1MIN = 45.0;
+const double S1MAX = 143.0;
+const double S2MIN = -66.0;
+const double S2MAX = 114.0;
 
 
 // Servo types. These would normally not be specified at compile time,
