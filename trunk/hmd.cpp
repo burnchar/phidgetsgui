@@ -1,11 +1,11 @@
 /*
 	Name        : hmd.cpp
-	Author      : Kristina Kumbulla
+	Author      : Charles Burns
 	Date        : 11 February 2010
-	License     : 
+	License     : GPL3. See license.txt or www.gnu.org/licenses/gpl-3.0.txt
 	Requirements: Qt 4, Phidgets servo controller & C library (www.phidgets.com)
 	Notes       : Written with Qt Creator. Best viewed with tab width 4.
-	Description : 
+	Description :
 */
 
 

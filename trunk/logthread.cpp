@@ -15,14 +15,18 @@
 #include <QDebug>
 #include "logthread.h"
 
-const quint16 SIGNATURE = 0x4342; // Log file signatute, "CB"
+const quint16 SIGNATURE = 0x4342; // Log file signature, ASCII initials "CB"
 
+long logEntryCountByServo[MAX_SERVOS_SUPPORTED];
 QQueue<LogEntry> actionLog;	// Actions enqueued here are later written to disk
 QReadWriteLock lock;		// Smart mutex for actionlog
 
 
 LogThread::LogThread()
 {
+	for(int servoCount = 0; servoCount < MAX_SERVOS_SUPPORTED; ++servoCount) {
+		logEntryCountByServo[servoCount] = 0;
+	}
 	logFile.setFileName("servolog.cnb");
 	if(!logFile.open(QIODevice::WriteOnly)) {
 		qDebug() << "Unable to write to log file.";
@@ -36,15 +40,18 @@ LogThread::LogThread()
 //! Entrypoint for LogThread
 //! Check to see if there are things to log and if so, write them to disk.
 //! Otherwise, wait 100ms and check again.
+//! Exit only when "go" is false AND all queued events are written
 void LogThread::run()
 {
 	while(! actionLog.isEmpty() || go) {
-		while(! actionLog.isEmpty()) {
+		while(! actionLog.isEmpty()) { // Write all queued log entries
 			lock.lockForRead();
 			LogEntry entry = actionLog.dequeue();
 			lock.unlock();
 
 			outStream << entry.dat.asInt << entry.position;
+			++logEntryCountByServo[entry.dat.asBitfield.servoIndex];
+
 			yieldCurrentThread();
 		}
 		msleep(100);
@@ -67,8 +74,9 @@ LogThread::~LogThread()
 void LogThread::writeHeader()
 {
 	LogHeader h;
-	
+
 	h.signature = SIGNATURE; // "CB"
+	h.version = 1;
 	h.headerSize = sizeof(LogHeader);
 	h.logEntrySize = sizeof(LogEntry);
 	h.userID = 0; // TODO
@@ -80,13 +88,13 @@ void LogThread::writeHeader()
 	h.dummyEntry1.dat.asBitfield.isPaused = 1;
 	h.dummyEntry1.dat.asBitfield.msOffset = 0;
 	h.dummyEntry1.dat.asBitfield.servoIndex = 8;	// 111b
-	
+
 	h.dummyEntry2.position = 0xAAFF00CC;   // 10101010111111110000000011001100b
 	h.dummyEntry2.dat.asBitfield.isFromHmd = 1;
 	h.dummyEntry2.dat.asBitfield.isPaused = 0;
-	h.dummyEntry2.dat.asBitfield.msOffset = 0x7FFFFFF; // 27 1's in binary 
+	h.dummyEntry2.dat.asBitfield.msOffset = 0x7FFFFFF; // 27 1's in binary
 	h.dummyEntry2.dat.asBitfield.servoIndex = 0;
-	
+
 	outStream << h;
 }
 

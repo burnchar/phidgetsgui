@@ -24,6 +24,8 @@
 #define BIT_CLEAR(y, mask)      ( y &= ~(mask) )
 #define BIT_FLIP(y, mask)       ( y ^=  (mask) )
 
+const qint8 MAX_SERVOS_SUPPORTED = 8;
+
 // Structure of a position change entry in the action log.
 // Each entry consists of only two 32-bit integers.
 struct LogEntry {
@@ -33,7 +35,7 @@ struct LogEntry {
 		unsigned servoIndex	:	3;
 		unsigned msOffset	:	27;
 	};
-	
+
 	union servoLogData {
 		quint32 asInt;
 		servoLogBitfield asBitfield;
@@ -47,6 +49,7 @@ struct LogEntry {
 // Structure of log header. See LogThread::writeHeader
 struct LogHeader {
 	quint16 signature;		// Header signature ("CB")
+	quint16 version;		// Version of header file
 	quint8 headerSize;		// Size of header in bytes
 	quint8 logEntrySize;	// Size of an individual log entry
 	quint16 userID;			// ID # of user who started the session
@@ -61,14 +64,14 @@ private:
 	friend QDataStream& operator >> (QDataStream &stream, LogHeader &lh);
 };
 
-	
+
 class LogThread : public QThread
 {
 public:
-    LogThread();
-    ~LogThread();
+	LogThread();
+	~LogThread();
 	void writeHeader();
-	void logEvent(quint32 logEntry);	
+	void logEvent(quint32 logEntry);
 	void run();
 	void stop();
 private:

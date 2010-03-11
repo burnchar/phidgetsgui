@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Sun Feb 21 22:22:39 2010
+** Created: Thu Mar 11 16:12:59 2010
 **      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -72,21 +72,22 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(600, 541);
+        MainWindow->resize(650, 550);
         QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(MainWindow->sizePolicy().hasHeightForWidth());
         MainWindow->setSizePolicy(sizePolicy);
+        MainWindow->setIconSize(QSize(24, 24));
         MainWindow->setDocumentMode(true);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         groupBoxCurrentPosition = new QGroupBox(centralWidget);
         groupBoxCurrentPosition->setObjectName(QString::fromUtf8("groupBoxCurrentPosition"));
-        groupBoxCurrentPosition->setGeometry(QRect(150, 10, 441, 331));
+        groupBoxCurrentPosition->setGeometry(QRect(150, 10, 491, 341));
         yPositionSlider = new QSlider(groupBoxCurrentPosition);
         yPositionSlider->setObjectName(QString::fromUtf8("yPositionSlider"));
-        yPositionSlider->setGeometry(QRect(20, 40, 70, 200));
+        yPositionSlider->setGeometry(QRect(9, 40, 111, 221));
         yPositionSlider->setMinimum(-90000);
         yPositionSlider->setMaximum(90000);
         yPositionSlider->setSingleStep(100);
@@ -97,7 +98,7 @@ public:
         yPositionSlider->setTickInterval(10000);
         lcdXPosition = new QLCDNumber(groupBoxCurrentPosition);
         lcdXPosition->setObjectName(QString::fromUtf8("lcdXPosition"));
-        lcdXPosition->setGeometry(QRect(170, 260, 90, 30));
+        lcdXPosition->setGeometry(QRect(200, 271, 90, 30));
         lcdXPosition->setMidLineWidth(0);
         lcdXPosition->setSmallDecimalPoint(false);
         lcdXPosition->setNumDigits(6);
@@ -107,7 +108,7 @@ public:
         lcdXPosition->setProperty("intValue", QVariant(0));
         lcdYPosition = new QLCDNumber(groupBoxCurrentPosition);
         lcdYPosition->setObjectName(QString::fromUtf8("lcdYPosition"));
-        lcdYPosition->setGeometry(QRect(10, 260, 90, 30));
+        lcdYPosition->setGeometry(QRect(20, 271, 90, 30));
         lcdYPosition->setSmallDecimalPoint(false);
         lcdYPosition->setNumDigits(6);
         lcdYPosition->setDigitCount(6);
@@ -116,10 +117,12 @@ public:
         lcdYPosition->setProperty("intValue", QVariant(0));
         xPositionControl = new RotationWidget(groupBoxCurrentPosition);
         xPositionControl->setObjectName(QString::fromUtf8("xPositionControl"));
-        xPositionControl->setGeometry(QRect(120, 30, 211, 211));
+        xPositionControl->setGeometry(QRect(130, 30, 231, 231));
         zPositionSlider = new QSlider(groupBoxCurrentPosition);
         zPositionSlider->setObjectName(QString::fromUtf8("zPositionSlider"));
-        zPositionSlider->setGeometry(QRect(356, 20, 20, 251));
+        zPositionSlider->setGeometry(QRect(392, 20, 51, 231));
+        zPositionSlider->setSizeIncrement(QSize(0, 0));
+        zPositionSlider->setBaseSize(QSize(0, 0));
         zPositionSlider->setMaximum(200);
         zPositionSlider->setValue(200);
         zPositionSlider->setOrientation(Qt::Vertical);
@@ -129,7 +132,7 @@ public:
         zDialLeft = new QDial(groupBoxCurrentPosition);
         zDialLeft->setObjectName(QString::fromUtf8("zDialLeft"));
         zDialLeft->setEnabled(true);
-        zDialLeft->setGeometry(QRect(332, 290, 30, 30));
+        zDialLeft->setGeometry(QRect(381, 290, 31, 31));
         zDialLeft->setMaximum(36000);
         zDialLeft->setValue(18354);
         zDialLeft->setTracking(false);
@@ -137,7 +140,7 @@ public:
         zDialLeft->setNotchesVisible(false);
         zDialRight = new QDial(groupBoxCurrentPosition);
         zDialRight->setObjectName(QString::fromUtf8("zDialRight"));
-        zDialRight->setGeometry(QRect(367, 290, 30, 30));
+        zDialRight->setGeometry(QRect(417, 290, 31, 31));
         zDialRight->setMaximum(36000);
         zDialRight->setValue(17646);
         zDialRight->setTracking(false);
@@ -145,42 +148,42 @@ public:
         zDialRight->setNotchesVisible(false);
         zLabelCentimeters = new QLabel(groupBoxCurrentPosition);
         zLabelCentimeters->setObjectName(QString::fromUtf8("zLabelCentimeters"));
-        zLabelCentimeters->setGeometry(QRect(380, 95, 61, 31));
+        zLabelCentimeters->setGeometry(QRect(430, 95, 61, 31));
         zLabelFeetInches = new QLabel(groupBoxCurrentPosition);
         zLabelFeetInches->setObjectName(QString::fromUtf8("zLabelFeetInches"));
-        zLabelFeetInches->setGeometry(QRect(380, 130, 61, 31));
+        zLabelFeetInches->setGeometry(QRect(430, 130, 61, 31));
         label = new QLabel(groupBoxCurrentPosition);
         label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(0, 289, 121, 31));
+        label->setGeometry(QRect(10, 300, 121, 31));
         label->setAlignment(Qt::AlignCenter);
         label_2 = new QLabel(groupBoxCurrentPosition);
         label_2->setObjectName(QString::fromUtf8("label_2"));
-        label_2->setGeometry(QRect(160, 289, 121, 31));
+        label_2->setGeometry(QRect(190, 300, 121, 31));
         label_2->setAlignment(Qt::AlignCenter);
         groupBoxHeadMountedDisplay = new QGroupBox(centralWidget);
         groupBoxHeadMountedDisplay->setObjectName(QString::fromUtf8("groupBoxHeadMountedDisplay"));
-        groupBoxHeadMountedDisplay->setGeometry(QRect(10, 10, 131, 131));
+        groupBoxHeadMountedDisplay->setGeometry(QRect(10, 10, 131, 141));
         btnCalibrate = new QPushButton(groupBoxHeadMountedDisplay);
         btnCalibrate->setObjectName(QString::fromUtf8("btnCalibrate"));
-        btnCalibrate->setGeometry(QRect(10, 100, 111, 23));
+        btnCalibrate->setGeometry(QRect(10, 100, 111, 31));
         btnPauseTracking = new QPushButton(groupBoxHeadMountedDisplay);
         btnPauseTracking->setObjectName(QString::fromUtf8("btnPauseTracking"));
-        btnPauseTracking->setGeometry(QRect(10, 20, 111, 23));
+        btnPauseTracking->setGeometry(QRect(10, 20, 111, 31));
         btnResumeTracking = new QPushButton(groupBoxHeadMountedDisplay);
         btnResumeTracking->setObjectName(QString::fromUtf8("btnResumeTracking"));
-        btnResumeTracking->setGeometry(QRect(10, 60, 111, 23));
+        btnResumeTracking->setGeometry(QRect(10, 60, 111, 31));
         groupBoxSession = new QGroupBox(centralWidget);
         groupBoxSession->setObjectName(QString::fromUtf8("groupBoxSession"));
-        groupBoxSession->setGeometry(QRect(10, 150, 131, 101));
+        groupBoxSession->setGeometry(QRect(10, 160, 131, 101));
         btnNewSession = new QPushButton(groupBoxSession);
         btnNewSession->setObjectName(QString::fromUtf8("btnNewSession"));
-        btnNewSession->setGeometry(QRect(10, 20, 111, 23));
+        btnNewSession->setGeometry(QRect(10, 20, 111, 31));
         btnFinalizeSession = new QPushButton(groupBoxSession);
         btnFinalizeSession->setObjectName(QString::fromUtf8("btnFinalizeSession"));
-        btnFinalizeSession->setGeometry(QRect(10, 60, 111, 23));
+        btnFinalizeSession->setGeometry(QRect(10, 60, 111, 31));
         groupBoxStatistics = new QGroupBox(centralWidget);
         groupBoxStatistics->setObjectName(QString::fromUtf8("groupBoxStatistics"));
-        groupBoxStatistics->setGeometry(QRect(10, 351, 581, 81));
+        groupBoxStatistics->setGeometry(QRect(10, 360, 631, 81));
         L3 = new QLabel(groupBoxStatistics);
         L3->setObjectName(QString::fromUtf8("L3"));
         L3->setGeometry(QRect(180, 20, 71, 16));
@@ -215,16 +218,17 @@ public:
         lblElapsedTime->setTextFormat(Qt::PlainText);
         sessionLog = new QPlainTextEdit(centralWidget);
         sessionLog->setObjectName(QString::fromUtf8("sessionLog"));
-        sessionLog->setGeometry(QRect(10, 440, 581, 81));
+        sessionLog->setGeometry(QRect(10, 440, 631, 81));
         sessionLog->setReadOnly(true);
         sessionLog->setPlainText(QString::fromUtf8(""));
         sessionLog->setMaximumBlockCount(10000);
         groupBox = new QGroupBox(centralWidget);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(10, 260, 131, 81));
+        groupBox->setGeometry(QRect(10, 270, 131, 81));
         radioButton_fromHMD = new QRadioButton(groupBox);
         radioButton_fromHMD->setObjectName(QString::fromUtf8("radioButton_fromHMD"));
         radioButton_fromHMD->setGeometry(QRect(20, 20, 101, 17));
+        radioButton_fromHMD->setIconSize(QSize(16, 16));
         radioButton_fromConsole = new QRadioButton(groupBox);
         radioButton_fromConsole->setObjectName(QString::fromUtf8("radioButton_fromConsole"));
         radioButton_fromConsole->setGeometry(QRect(20, 50, 101, 17));
@@ -347,7 +351,7 @@ public:
         L3->setText(QApplication::translate("MainWindow", "Start time:", 0, QApplication::UnicodeUTF8));
         L4->setText(QApplication::translate("MainWindow", "Elapsed time:", 0, QApplication::UnicodeUTF8));
         L2->setText(QApplication::translate("MainWindow", "Total Y movement:", 0, QApplication::UnicodeUTF8));
-        L1->setText(QApplication::translate("MainWindow", "Total X movement:", 0, QApplication::UnicodeUTF8));
+        L1->setText(QApplication::translate("MainWindow", "Total commands logged", 0, QApplication::UnicodeUTF8));
         lblXMovement->setText(QApplication::translate("MainWindow", "0", 0, QApplication::UnicodeUTF8));
         lblYMovement->setText(QApplication::translate("MainWindow", "0", 0, QApplication::UnicodeUTF8));
         lblStartTime->setText(QApplication::translate("MainWindow", "No session started", 0, QApplication::UnicodeUTF8));
