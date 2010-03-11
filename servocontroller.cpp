@@ -25,7 +25,6 @@ ServoController::ServoController(int servos, int PhidgetID)
 	}
 	else {
 		qDebug() << "Could not attach to servo controller.";
-		//exit(1);
 	}
 }
 
@@ -200,7 +199,7 @@ void ServoController::disengage(int index) const
 }
 
 
-//! Engages all servox
+//! Engages all servos
 void ServoController::engageAll() const
 {
 	for(int servo = 0; servo < this->numServosAttached; ++servo) {

@@ -32,10 +32,10 @@ MainWindow::MainWindow(QWidget *parent)
 	ui->btnFinalizeSession->setEnabled(false);
 	ui->radioButton_fromHMD->setChecked(true);
 
-	this->setFixedSize(600, 541);
+	this->setFixedSize(650, 550);
 	this->servos = 0;
 	this->defaultStatusBarMessage = new QString("Phidgets GUI ©2010 ND");
-	this->setWindowTitle("ND Control Console v. 0.1 Alpha");
+	this->setWindowTitle("ND Control Console v. 0.2 Beta");
 	this->timer = new QTimer(this);
 	this->connectEvents();
 	this->createStatusBar();
