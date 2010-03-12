@@ -35,14 +35,15 @@ MainWindow::MainWindow(QWidget *parent)
 	this->setFixedSize(650, 550);
 	this->servos = 0;
 	this->defaultStatusBarMessage = new QString("Phidgets GUI ©2010 ND");
-	this->setWindowTitle("ND Control Console v. 0.2 Beta");
-	this->timer = new QTimer(this);
+	this->setWindowTitle("ND Control Console v. 0.3 Beta");
+	this->sessionTimer = new QTimer(this);
+	this->guiUpdateTimer = new QTimer(this);
 	this->connectEvents();
 	this->createStatusBar();
 	this->sessionActive = false;
 	this->sessionPaused = false;
 
-	mainTimer.start(); // Used in LogThread class
+	logOffsetTimer.start(); // Used in LogThread class
 }
 
 
@@ -50,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent)
 //! sets the numeric counter to change value when its slider is moved.
 void MainWindow::connectEvents()
 {
-	connect(timer, SIGNAL(timeout()), this, SLOT(updateSessionElapsedTime()));
+	connect(sessionTimer, SIGNAL(timeout()), this, SLOT(updateSessionElapsedTime()));
 	connect(qApp, SIGNAL(aboutToQuit()), SLOT(cleanUpBeforeExit()));
 
 	connect(ui->btnNewSession, SIGNAL(clicked()), SLOT(newSession()));
@@ -215,7 +216,7 @@ void MainWindow::newSession()
 		ui->lblStartTime->setText(sessionStartTime.toString("h:mm ap"));
 		ui->lblElapsedTime->setText("0h 0m 0s");
 		log("-- MARK -- Began new session");
-		timer->start(1000);
+		sessionTimer->start(100);
 		QTimer::singleShot(75, this, SLOT(setSessionActive(void)));
 		resetControls();
 	}
@@ -229,6 +230,9 @@ void MainWindow::finalizeSession()
 {
 	servos->disengageAll();
 	if(this->sessionActive) {
+		for(int servoCount = 0; servoCount < 8; ++servoCount) {
+			logEntryCountByServo[servoCount] = 0;
+		}
 		ui->btnNewSession->setEnabled(true);
 		ui->btnFinalizeSession->setEnabled(false);
 		ui->btnResumeTracking->setEnabled(false);
@@ -241,14 +245,15 @@ void MainWindow::finalizeSession()
 		QString elapsedSeconds = QString::number((double)sessionElapsedTime);
 		log("Ended session. Duration: " + elapsedSeconds + " seconds");
 
-		timer->stop();
+		guiUpdateTimer->stop();
+		sessionTimer->stop();
 		sessionActive = false;
 	}
 	this->sessionPaused = false;
 }
 
 
-//! Called once per second  to update the "session elapsed time" label
+//! Called once per second to update the "session elapsed time" label
 void MainWindow::updateSessionElapsedTime()
 {
 	static const int secondsPerHour = 3600;
@@ -259,9 +264,19 @@ void MainWindow::updateSessionElapsedTime()
 	int mins = secs / 60;
 	secs -= mins * 60;
 
-	QString elapsed = QString("%1h %2m %3s").arg(hrs).arg(mins).arg(secs);
-	ui->lblElapsedTime->setText(elapsed);
+	QString labelText = QString("%1h %2m %3s").arg(hrs).arg(mins).arg(secs);
+	ui->lblElapsedTime->setText(labelText);
+
+
+	labelText = QString("X: %1").arg(logEntryCountByServo[0]);
+	ui->labelXLogs->setText(labelText);
+	labelText = QString("Y: %1").arg(logEntryCountByServo[1]);
+	ui->labelYLogs->setText(labelText);
+	labelText = QString("Z: %1").arg(logEntryCountByServo[2]);
+	ui->labelZLogs->setText(labelText);
 }
+
+//! Called to update most recent
 
 
 //! Sets the position of all servo angle indicator controls to zero
