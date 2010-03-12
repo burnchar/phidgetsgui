@@ -55,7 +55,7 @@ void logActions(int servoIndex, double angle)
 		qDebug() << "Servo index <= 8 given. Changed to 8. File:" << __FILE__
 				<< " line number: " << __LINE__;
 	}
-	int msSinceLastLogEntry = w->mainTimer.restart();
+	int msSinceLastLogEntry = w->logOffsetTimer.restart();
 
 	logData.dat.asBitfield.servoIndex = servoIndex;
 	logData.dat.asBitfield.isPaused = (w->sessionPaused == true ? 1 : 0);
@@ -78,7 +78,7 @@ int __stdcall PositionChangeHandler(CPhidgetAdvancedServoHandle ADVSERVO,
 									void *usrptr, int index, double value)
 {
 
-	qDebug() << "Value from change handler:" << value;
+	//qDebug() << "Value from change handler:" << value;
 	CPhidgetAdvancedServoHandle servoControllerHandle = ADVSERVO;
 	servoControllerHandle = 0;
 	usrptr = 0;

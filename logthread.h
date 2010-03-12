@@ -24,7 +24,6 @@
 #define BIT_CLEAR(y, mask)      ( y &= ~(mask) )
 #define BIT_FLIP(y, mask)       ( y ^=  (mask) )
 
-const qint8 MAX_SERVOS_SUPPORTED = 8;
 
 // Structure of a position change entry in the action log.
 // Each entry consists of only two 32-bit integers.

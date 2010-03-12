@@ -17,14 +17,14 @@
 
 const quint16 SIGNATURE = 0x4342; // Log file signature, ASCII initials "CB"
 
-long logEntryCountByServo[MAX_SERVOS_SUPPORTED];
+long logEntryCountByServo[8];
 QQueue<LogEntry> actionLog;	// Actions enqueued here are later written to disk
 QReadWriteLock lock;		// Smart mutex for actionlog
 
 
 LogThread::LogThread()
 {
-	for(int servoCount = 0; servoCount < MAX_SERVOS_SUPPORTED; ++servoCount) {
+	for(int servoCount = 0; servoCount < 8; ++servoCount) {
 		logEntryCountByServo[servoCount] = 0;
 	}
 	logFile.setFileName("servolog.cnb");
@@ -51,6 +51,8 @@ void LogThread::run()
 
 			outStream << entry.dat.asInt << entry.position;
 			++logEntryCountByServo[entry.dat.asBitfield.servoIndex];
+			qDebug() << logEntryCountByServo[0] << logEntryCountByServo[1]
+					 << logEntryCountByServo[2];
 
 			yieldCurrentThread();
 		}

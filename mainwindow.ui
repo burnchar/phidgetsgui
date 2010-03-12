@@ -189,7 +189,7 @@ p, li { white-space: pre-wrap; }
     <widget class="QSlider" name="zPositionSlider">
      <property name="geometry">
       <rect>
-       <x>392</x>
+       <x>382</x>
        <y>20</y>
        <width>51</width>
        <height>231</height>
@@ -232,7 +232,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="geometry">
       <rect>
-       <x>381</x>
+       <x>371</x>
        <y>290</y>
        <width>31</width>
        <height>31</height>
@@ -257,7 +257,7 @@ p, li { white-space: pre-wrap; }
     <widget class="QDial" name="zDialRight">
      <property name="geometry">
       <rect>
-       <x>417</x>
+       <x>407</x>
        <y>290</y>
        <width>31</width>
        <height>31</height>
@@ -308,7 +308,7 @@ p, li { white-space: pre-wrap; }
       <string>6 ft 6 in</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="labelY">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -324,7 +324,7 @@ p, li { white-space: pre-wrap; }
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="labelX">
      <property name="geometry">
       <rect>
        <x>190</x>
@@ -338,6 +338,19 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelZ">
+     <property name="geometry">
+      <rect>
+       <x>440</x>
+       <y>300</y>
+       <width>51</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Z Angle</string>
      </property>
     </widget>
    </widget>
@@ -487,7 +500,7 @@ p, li { white-space: pre-wrap; }
     <widget class="QLabel" name="L3">
      <property name="geometry">
       <rect>
-       <x>180</x>
+       <x>380</x>
        <y>20</y>
        <width>71</width>
        <height>16</height>
@@ -503,7 +516,7 @@ p, li { white-space: pre-wrap; }
     <widget class="QLabel" name="L4">
      <property name="geometry">
       <rect>
-       <x>180</x>
+       <x>380</x>
        <y>50</y>
        <width>71</width>
        <height>16</height>
@@ -516,65 +529,49 @@ p, li { white-space: pre-wrap; }
       <enum>Qt::PlainText</enum>
      </property>
     </widget>
-    <widget class="QLabel" name="L2">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>50</y>
-       <width>101</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Total Y movement:</string>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::PlainText</enum>
-     </property>
-    </widget>
-    <widget class="QLabel" name="L1">
+    <widget class="QLabel" name="labelServoMovements">
      <property name="geometry">
       <rect>
        <x>20</x>
        <y>20</y>
-       <width>101</width>
+       <width>151</width>
        <height>16</height>
       </rect>
      </property>
      <property name="text">
-      <string>Total commands logged</string>
+      <string>Servo movements by axis.</string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
      </property>
     </widget>
-    <widget class="QLabel" name="lblXMovement">
+    <widget class="QLabel" name="labelXLogs">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>20</y>
-       <width>71</width>
-       <height>16</height>
+       <x>20</x>
+       <y>40</y>
+       <width>42</width>
+       <height>20</height>
       </rect>
      </property>
      <property name="text">
-      <string>0</string>
+      <string>X: </string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
      </property>
     </widget>
-    <widget class="QLabel" name="lblYMovement">
+    <widget class="QLabel" name="labelYLogs">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>50</y>
-       <width>71</width>
-       <height>16</height>
+       <x>70</x>
+       <y>40</y>
+       <width>42</width>
+       <height>20</height>
       </rect>
      </property>
      <property name="text">
-      <string>0</string>
+      <string>Y: </string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
@@ -583,7 +580,7 @@ p, li { white-space: pre-wrap; }
     <widget class="QLabel" name="lblStartTime">
      <property name="geometry">
       <rect>
-       <x>260</x>
+       <x>460</x>
        <y>20</y>
        <width>161</width>
        <height>16</height>
@@ -599,7 +596,7 @@ p, li { white-space: pre-wrap; }
     <widget class="QLabel" name="lblElapsedTime">
      <property name="geometry">
       <rect>
-       <x>260</x>
+       <x>460</x>
        <y>50</y>
        <width>161</width>
        <height>16</height>
@@ -610,6 +607,19 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelZLogs">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>40</y>
+       <width>42</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Z: </string>
      </property>
     </widget>
    </widget>

@@ -23,6 +23,6 @@ class LogThread;
 extern ServoController *servos;
 extern MainWindow *w;
 extern QQueue<LogEntry> actionLog; // Stores actions to be logged to disk
-extern long logEntryCount[8];
+extern long logEntryCountByServo[8];
 
 #endif // CONNECT_H

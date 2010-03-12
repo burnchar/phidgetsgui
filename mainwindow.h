@@ -31,9 +31,10 @@ const double Y_SLIDER_DIVIDER = 1000.0;
 const int Z_DIAL_MULTIPLIER = 100;
 
 class ServoController;
+class LogThread;
 
 namespace Ui {
-    class MainWindow;
+	class MainWindow;
 }
 
 
@@ -45,18 +46,19 @@ enum SERVO_INDEX {
 };
 
 class MainWindow : public QMainWindow {
-    Q_OBJECT // Tells MOC that this class uses signals/slots
+	Q_OBJECT // Tells MOC that this class uses signals/slots
 public:
 	void setServoController(ServoController *servoController);
-    MainWindow(QWidget *parent = 0);
+	MainWindow(QWidget *parent = 0);
 	~MainWindow();
 
 protected:
-    void changeEvent(QEvent *e);
+	void changeEvent(QEvent *e);
 
 private:
-	QTime mainTimer;	// Used for timing offsets between movement commands
-    Ui::MainWindow *ui;
+	QTime logOffsetTimer;	// Used for timing offsets between movement commands
+
+	Ui::MainWindow *ui;
 	bool sessionActive;
 	bool sessionPaused;
 
@@ -65,7 +67,8 @@ private:
 	QDateTime sessionEndTime;	// Recorded when session is finalized
 	QDateTime sessionPauseTime;	// Recorded when session is paused
 	QDateTime sessionBreakTime;	// (now - sessionPauseTime)
-	QTimer *timer;				// Used for timing session and break time
+	QTimer *sessionTimer;			// Used for timing session and break time
+	QTimer *guiUpdateTimer;
 	QLabel *statusBarLabel;
 	QString *defaultStatusBarMessage;
 	int sessionElapsedTime;
@@ -74,14 +77,14 @@ private:
 	void connectEvents();
 	void createStatusBar();
 	void log(QString logText); // Usually small text, not worth using reference
-	void log(const char *logText);	
-	
+	void log(const char *logText);
+
 	// These friend functions are defined in eventhandlers.cpp
 	friend void updateUiXWidget(double angle);
 	friend void updateUiYWidget(double angle);
 	friend void logGUI(QString message);
 	friend void logActions(int servoIndex, double angle);
-	
+
 	void setXAngle(double angle);
 	void setYAngle(double angle);
 
@@ -92,10 +95,11 @@ private slots:
 	void newSession();
 	void finalizeSession();
 	void updateSessionElapsedTime();
+//	void updateSessionInfo();
 	void resetControls();
 	void setSessionActive();
 	void cleanUpBeforeExit();
-	
+
 	void onXControlChange(double angle);
 	void onYControlChange(int sliderValue);
 	void setYLcd(int angle);
