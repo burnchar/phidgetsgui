@@ -22,7 +22,11 @@
 
 #include "ui_mainwindow.h"
 #include "servocontroller.h"
-#include "hmd.h"
+#include "headmounteddisplay.h"
+
+class ServoController;
+class LogThread;
+class Hmd;
 
 // Sliders and dials support only integer values which they do not display, so
 // their range is made into a large number later divided by these values in
@@ -30,8 +34,6 @@
 const double Y_SLIDER_DIVIDER = 1000.0;
 const int Z_DIAL_MULTIPLIER = 100;
 
-class ServoController;
-class LogThread;
 
 namespace Ui {
 	class MainWindow;
@@ -87,6 +89,8 @@ private:
 
 	void setXAngle(double angle);
 	void setYAngle(double angle);
+
+	//Hmd
 
 private slots:
 	void pauseTracking();
