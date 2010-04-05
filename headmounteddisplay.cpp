@@ -120,13 +120,13 @@ bool HeadMountedDisplay::updateData()
 {
 	bool retval = getData(pData);
 	if(retval)	{
-		qDebug() << "Record ID: %d" << data.dataID;
-		qDebug() << "Yaw: %5.2f" << data.yaw;
-		qDebug() << "Pitch: %5.2f" << data.pitch;
-		qDebug() << "Roll: %5.2f" << data.roll;
-		qDebug() << "X: %5.2f" << data.x;
-		qDebug() << "Y: %5.2f" << data.y;
-		qDebug() << "Z: %5.2f" << data.z;
+//		qDebug() << "Record ID: %d" << data.dataID;
+//		qDebug() << "Yaw: %5.2f" << data.yaw;
+//		qDebug() << "Pitch: %5.2f" << data.pitch;
+//		qDebug() << "Roll: %5.2f" << data.roll;
+//		qDebug() << "X: %5.2f" << data.x;
+//		qDebug() << "Y: %5.2f" << data.y;
+//		qDebug() << "Z: %5.2f" << data.z;
 	}
 	else {
 		qDebug() << "Nothing returned from getData";
@@ -136,13 +136,13 @@ bool HeadMountedDisplay::updateData()
 
 float HeadMountedDisplay::getYaw()
 {
-	updateData();
+//	updateData();
 	return data.yaw;
 }
 
 float HeadMountedDisplay::getPitch()
 {
-	updateData();
+//	updateData();
 	return data.pitch;
 }
 

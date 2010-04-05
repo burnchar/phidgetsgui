@@ -26,7 +26,7 @@
 
 class ServoController;
 class LogThread;
-class Hmd;
+class HeadMountedDisplay;
 
 // Sliders and dials support only integer values which they do not display, so
 // their range is made into a large number later divided by these values in
@@ -70,7 +70,7 @@ private:
 	QDateTime sessionPauseTime;	// Recorded when session is paused
 	QDateTime sessionBreakTime;	// (now - sessionPauseTime)
 	QTimer *sessionTimer;			// Used for timing session and break time
-	QTimer *guiUpdateTimer;
+	QTimer *hmdTimer;
 	QLabel *statusBarLabel;
 	QString *defaultStatusBarMessage;
 	int sessionElapsedTime;
@@ -90,7 +90,7 @@ private:
 	void setXAngle(double angle);
 	void setYAngle(double angle);
 
-	//Hmd
+	HeadMountedDisplay *hmd;
 
 private slots:
 	void pauseTracking();
@@ -99,6 +99,7 @@ private slots:
 	void newSession();
 	void finalizeSession();
 	void updateSessionElapsedTime();
+	void updateHmdPositionData();
 //	void updateSessionInfo();
 	void resetControls();
 	void setSessionActive();
