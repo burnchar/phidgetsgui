@@ -37,11 +37,13 @@ MainWindow::MainWindow(QWidget *parent)
 	this->defaultStatusBarMessage = new QString("Phidgets GUI ©2010 ND");
 	this->setWindowTitle("ND Control Console v. 0.3 Beta");
 	this->sessionTimer = new QTimer(this);
-	this->guiUpdateTimer = new QTimer(this);
+	this->hmdTimer = new QTimer(this);
 	this->connectEvents();
 	this->createStatusBar();
 	this->sessionActive = false;
 	this->sessionPaused = false;
+
+	hmd = new HeadMountedDisplay();
 
 	logOffsetTimer.start(); // Used in LogThread class
 }
@@ -52,6 +54,9 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::connectEvents()
 {
 	connect(sessionTimer, SIGNAL(timeout()), this, SLOT(updateSessionElapsedTime()));
+
+	connect(hmdTimer, SIGNAL(timeout()), this, SLOT(updateHmdPositionData()));
+
 	connect(qApp, SIGNAL(aboutToQuit()), SLOT(cleanUpBeforeExit()));
 
 	connect(ui->btnNewSession, SIGNAL(clicked()), SLOT(newSession()));
@@ -219,6 +224,12 @@ void MainWindow::newSession()
 		sessionTimer->start(100);
 		QTimer::singleShot(75, this, SLOT(setSessionActive(void)));
 		resetControls();
+		//|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+		hmdTimer->start(25);
+
+		//|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
 	}
 	this->sessionPaused = false;
 }
@@ -245,7 +256,7 @@ void MainWindow::finalizeSession()
 		QString elapsedSeconds = QString::number((double)sessionElapsedTime);
 		log("Ended session. Duration: " + elapsedSeconds + " seconds");
 
-		guiUpdateTimer->stop();
+		hmdTimer->stop();
 		sessionTimer->stop();
 		sessionActive = false;
 	}
@@ -277,7 +288,26 @@ void MainWindow::updateSessionElapsedTime()
 }
 
 //! Called to update most recent
+void MainWindow::updateHmdPositionData()
+{
+	float pitch, yaw, ipitch, iyaw;
 
+	if(ui->radioButton_fromHMD->isChecked() && this->sessionActive && !sessionPaused) {
+		if(hmd->updateData()) {
+			pitch = hmd->getPitch();
+			yaw = hmd->getYaw();
+			ipitch = interpolate(pitch, -0.31f, 0.05f, -15.0f, 15.0f);
+			iyaw = interpolate(yaw, -0.35f, 0.25f, -20.0f, 20.0f);
+			qDebug() << "Pitch:" << ipitch << "  Raw pitch: " << pitch;
+			qDebug() << "  Yaw:" << iyaw   << "    Raw yaw: " << yaw;
+			servos->setAngle(servo_y_index, -ipitch);
+			servos->setAngle(servo_x_index, -iyaw);
+			//ui->xPositionControl->setAngle(iyaw);
+			//ui->yPositionSlider->setValue(ipitch);
+		}
+		else qDebug() << "FreeTrack isn't providing position data.";
+	}
+}
 
 //! Sets the position of all servo angle indicator controls to zero
 void MainWindow::resetControls()

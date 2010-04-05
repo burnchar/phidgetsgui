@@ -7,7 +7,6 @@
 #include <QDebug>
 #include "connect.h"
 
-
 class HeadMountedDisplay {
 public:
 	HeadMountedDisplay();
@@ -18,7 +17,6 @@ public:
 private:
 	HINSTANCE hinstLib;
 };
-
 
 //int foo = servo_x_index;
 //int hmdSetAngle(int index, double angle);
