@@ -77,7 +77,6 @@ void logActions(int servoIndex, double angle)
 int __stdcall PositionChangeHandler(CPhidgetAdvancedServoHandle ADVSERVO,
 									void *usrptr, int index, double value)
 {
-
 	//qDebug() << "Value from change handler:" << value;
 	CPhidgetAdvancedServoHandle servoControllerHandle = ADVSERVO;
 	servoControllerHandle = 0;
@@ -85,6 +84,8 @@ int __stdcall PositionChangeHandler(CPhidgetAdvancedServoHandle ADVSERVO,
 	switch(index) {
 	case 0:
 		updateUiXWidget(value);
+	//qDebug() << "X angle sent to control, reported from PSH:" << value;
+
 		break;
 	case 1:
 		updateUiYWidget(value);

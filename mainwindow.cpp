@@ -87,7 +87,7 @@ void MainWindow::connectEvents()
 void MainWindow::setXAngle(double angle)
 {
 	if(ui->radioButton_fromHMD->isChecked() && sessionActive && !sessionPaused){
-		ui->xPositionControl->setAngle(angle);
+		ui->xPositionControl->setAngle( -(angle - 90));
 	}
 }
 
@@ -98,7 +98,7 @@ void MainWindow::setXAngle(double angle)
 void MainWindow::setYAngle(double angle)
 {
 	if(ui->radioButton_fromHMD->isChecked() && sessionActive && !sessionPaused){
-		ui->yPositionSlider->setValue(angle * Y_SLIDER_DIVIDER);
+		ui->yPositionSlider->setValue(- (angle - 90) * Y_SLIDER_DIVIDER);
 	}
 }
 
@@ -298,14 +298,14 @@ void MainWindow::updateHmdPositionData()
 			yaw = hmd->getYaw();
 			ipitch = interpolate(pitch, -0.31f, 0.05f, -15.0f, 15.0f);
 			iyaw = interpolate(yaw, -0.35f, 0.25f, -20.0f, 20.0f);
-			qDebug() << "Pitch:" << ipitch << "  Raw pitch: " << pitch;
-			qDebug() << "  Yaw:" << iyaw   << "    Raw yaw: " << yaw;
+			//qDebug() << "Pitch:" << ipitch << "  Raw pitch: " << pitch;
+			//qDebug() << "  Yaw:" << iyaw   << "    Raw yaw: " << yaw;
 			servos->setAngle(servo_y_index, -ipitch);
 			servos->setAngle(servo_x_index, -iyaw);
 			//ui->xPositionControl->setAngle(iyaw);
 			//ui->yPositionSlider->setValue(ipitch);
 		}
-		else qDebug() << "FreeTrack isn't providing position data.";
+		//else qDebug() << "FreeTrack isn't providing position data.";
 	}
 }
 
@@ -404,9 +404,9 @@ void MainWindow::onZControlChange(int sliderValue)
 	ui->zLabelCentimeters->setText(QString("%1 cm").arg(cm));
 	ui->zLabelFeetInches->setText(QString("%1 ft %2 in").arg(feet).arg(inches));
 
-	if(ui->radioButton_fromConsole->isChecked() && this->sessionActive) {
+	if(this->sessionActive) {
 		servos->setAngle(servo_w_index, 180.0 - theta);
-		qDebug() <<theta;
+		//qDebug() <<theta;
 	}
 }
 
