@@ -129,7 +129,7 @@ bool HeadMountedDisplay::updateData()
 //		qDebug() << "Z: %5.2f" << data.z;
 	}
 	else {
-		qDebug() << "Nothing returned from getData";
+		//qDebug() << "Nothing returned from getData";
 	}
 	return retval;
 }

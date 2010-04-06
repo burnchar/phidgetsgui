@@ -51,8 +51,7 @@ void LogThread::run()
 
 			outStream << entry.dat.asInt << entry.position;
 			++logEntryCountByServo[entry.dat.asBitfield.servoIndex];
-			qDebug() << logEntryCountByServo[0] << logEntryCountByServo[1]
-					 << logEntryCountByServo[2];
+			//qDebug() << logEntryCountByServo[0] << logEntryCountByServo[1] << logEntryCountByServo[2];
 
 			yieldCurrentThread();
 		}
