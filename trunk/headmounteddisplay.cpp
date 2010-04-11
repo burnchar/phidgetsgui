@@ -1,13 +1,16 @@
 /*
 	Name        : HeadMountedDisplay.cpp
 	Author      : Charles Burns
-	Date        : 11 February 2010
+	Date        : 31 March 2010
 	License     : GPL3. See license.txt or www.gnu.org/licenses/gpl-3.0.txt
-	Requirements: Qt 4, Phidgets servo controller & C library (www.phidgets.com)
+	Requirements: Qt 4, Phidgets servo controller & C library(www.phidgets.com)
+				  and FreeTrackClient.dll
 	Notes       : Written with Qt Creator. Best viewed with tab width 4.
-	Description :
+	Description : Loads FreeTrackClient.dll and has it populate a data structure
+				  with its positioning data. This data is not given in radians
+				  or degrees, but as some unknown, possibly arbitrary range
+				  of values.
 */
-
 
 #include "headmounteddisplay.h"
 
@@ -44,15 +47,10 @@ typedef struct
 FreeTrackData data;
 FreeTrackData *pData;
 
-
-// DLL function signatures
-// These match those given in FTTypes.pas
-// WINAPI is macro for __stdcall defined somewhere in the depths of windows.h
-typedef bool (WINAPI *importGetData)(FreeTrackData * data);
+typedef bool  (WINAPI *importGetData)(FreeTrackData * data);
 typedef char *(WINAPI *importGetDllVersion)(void);
-typedef void (WINAPI *importReportID)(int name);
+typedef void  (WINAPI *importReportID)(int name);
 typedef char *(WINAPI *importProvider)(void);
-
 
 //declare imported function pointers
 importGetData getData;
@@ -60,99 +58,53 @@ importGetDllVersion getDllVersion;
 importReportID reportID;
 importProvider provider;
 
-
 HeadMountedDisplay::HeadMountedDisplay()
 {
-	// create variables for exchanging data with the dll
 	pData = &data;
-	char *pDllVersion;
-	int name = 453;
-	char *pProvider;
 
-	// Load DLL file
-	hinstLib = LoadLibrary(L"FreeTrackClient.dll");
-	if (hinstLib == NULL) {
+	// Load the DLL with the Windows API. 'L' prefix needed because name is in unicode.
+	hFreeTrack = LoadLibrary(L"FreeTrackClient.dll");
+	if(hFreeTrack == NULL) {
 		qDebug() << "ERROR: unable to load DLL";
-	}
-	else {
-		qDebug() << "DLL loaded";
+		exit(1);
 	}
 
-	// Get function pointers
-	getData = (importGetData)GetProcAddress(hinstLib, "FTGetData");
-	getDllVersion = (importGetDllVersion)GetProcAddress(hinstLib, "FTGetDllVersion");
-	reportID = (importReportID)GetProcAddress(hinstLib, "FTReportName");
-	provider = (importProvider)GetProcAddress(hinstLib, "FTProvider");
+	// Get function pointers.
+	getData =(importGetData)GetProcAddress(hFreeTrack, "FTGetData");
+	getDllVersion = (importGetDllVersion)GetProcAddress(hFreeTrack, "FTGetDllVersion");
+	reportID =(importReportID)GetProcAddress(hFreeTrack, "FTReportName");
+	provider =(importProvider)GetProcAddress(hFreeTrack, "FTProvider");
 
-	// Check they are valid
-	if (getData == NULL) {
-		qDebug() << "ERROR: unable to find 'FTGetData' function";
-		FreeLibrary(hinstLib);
-	}
-	if (getDllVersion == NULL){
-		qDebug() << "ERROR: unable to find 'FTGetDllVersion' function";
-		FreeLibrary(hinstLib);
-	}
-	if (reportID == NULL){
-		qDebug() << "ERROR: unable to find 'FTReportID' function";
-		FreeLibrary(hinstLib);
-	}
-	if (reportID == NULL){
-		qDebug() << "ERROR: unable to find 'FTProvider' function";
-		FreeLibrary(hinstLib);
-	}
+	// This is an undocumented function which gets an undocumented magic
+	// number for no documented reason.
+	reportID(453);
 
-	//    Print the address of each function
+	// Print the address of each function
 	qDebug() << "FTGetData is at address: " << getData;
 	qDebug() << "FTGetDllVersion is at address: " << getDllVersion;
 	qDebug() << "FTReportID is at address: " << reportID;
 	qDebug() << "FTProvider is at address: " << provider;
-
-	reportID(name); // ??
 }
 
 HeadMountedDisplay::~HeadMountedDisplay()
 {
-	FreeLibrary(hinstLib);
+	FreeLibrary(hFreeTrack);
 }
 
+// Populate position structure with the latest data
 bool HeadMountedDisplay::updateData()
 {
 	bool retval = getData(pData);
-	if(retval)	{
-//		qDebug() << "Record ID: %d" << data.dataID;
-//		qDebug() << "Yaw: %5.2f" << data.yaw;
-//		qDebug() << "Pitch: %5.2f" << data.pitch;
-//		qDebug() << "Roll: %5.2f" << data.roll;
-//		qDebug() << "X: %5.2f" << data.x;
-//		qDebug() << "Y: %5.2f" << data.y;
-//		qDebug() << "Z: %5.2f" << data.z;
-	}
-	else {
-		//qDebug() << "Nothing returned from getData";
-	}
 	return retval;
 }
 
 float HeadMountedDisplay::getYaw()
 {
-//	updateData();
 	return data.yaw;
 }
 
+// Returns the pitch value
 float HeadMountedDisplay::getPitch()
 {
-//	updateData();
 	return data.pitch;
 }
-
-// To set angle, must call servos->setAngle(servo_x_index, angle);
-// or some function in MainWindow that does that for you
-
-// To reset, servos->centerPositions();  and  resetControls();
-//int HeadMountedDisplay::HeadMountedDisplaySetAngle(int index, double angle)
-//{
-//	servos->setAngle(1, 50);
-//	return 0;
-//}
-

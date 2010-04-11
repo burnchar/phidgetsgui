@@ -8,9 +8,6 @@
 	Description : Thread for writing servo commands to a log on disk.
 */
 
-
-// Presentation: Custom data format vs. format in sqlite (all text)
-
 #include <QReadWriteLock>
 #include <QDebug>
 #include "logthread.h"
@@ -48,11 +45,8 @@ void LogThread::run()
 			lock.lockForRead();
 			LogEntry entry = actionLog.dequeue();
 			lock.unlock();
-
 			outStream << entry.dat.asInt << entry.position;
 			++logEntryCountByServo[entry.dat.asBitfield.servoIndex];
-			//qDebug() << logEntryCountByServo[0] << logEntryCountByServo[1] << logEntryCountByServo[2];
-
 			yieldCurrentThread();
 		}
 		msleep(100);

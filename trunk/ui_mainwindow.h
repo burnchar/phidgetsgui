@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Mon Apr 5 00:23:48 2010
+** Created: Sun Apr 11 11:06:27 2010
 **      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -102,8 +102,8 @@ public:
         lcdXPosition->setGeometry(QRect(200, 271, 90, 30));
         lcdXPosition->setMidLineWidth(0);
         lcdXPosition->setSmallDecimalPoint(false);
-        lcdXPosition->setNumDigits(6);
-        lcdXPosition->setDigitCount(6);
+        lcdXPosition->setNumDigits(4);
+        lcdXPosition->setDigitCount(4);
         lcdXPosition->setSegmentStyle(QLCDNumber::Flat);
         lcdXPosition->setProperty("value", QVariant(0));
         lcdXPosition->setProperty("intValue", QVariant(0));
@@ -111,8 +111,8 @@ public:
         lcdYPosition->setObjectName(QString::fromUtf8("lcdYPosition"));
         lcdYPosition->setGeometry(QRect(20, 271, 90, 30));
         lcdYPosition->setSmallDecimalPoint(false);
-        lcdYPosition->setNumDigits(6);
-        lcdYPosition->setDigitCount(6);
+        lcdYPosition->setNumDigits(4);
+        lcdYPosition->setDigitCount(4);
         lcdYPosition->setSegmentStyle(QLCDNumber::Flat);
         lcdYPosition->setProperty("value", QVariant(0));
         lcdYPosition->setProperty("intValue", QVariant(0));
@@ -133,19 +133,21 @@ public:
         zDialLeft = new QDial(groupBoxCurrentPosition);
         zDialLeft->setObjectName(QString::fromUtf8("zDialLeft"));
         zDialLeft->setEnabled(true);
-        zDialLeft->setGeometry(QRect(371, 290, 31, 31));
+        zDialLeft->setGeometry(QRect(370, 290, 31, 31));
         zDialLeft->setMaximum(36000);
         zDialLeft->setValue(18354);
         zDialLeft->setTracking(false);
         zDialLeft->setWrapping(true);
+        zDialLeft->setNotchTarget(36);
         zDialLeft->setNotchesVisible(false);
         zDialRight = new QDial(groupBoxCurrentPosition);
         zDialRight->setObjectName(QString::fromUtf8("zDialRight"));
-        zDialRight->setGeometry(QRect(407, 290, 31, 31));
+        zDialRight->setGeometry(QRect(406, 290, 31, 31));
         zDialRight->setMaximum(36000);
         zDialRight->setValue(17646);
         zDialRight->setTracking(false);
         zDialRight->setWrapping(true);
+        zDialRight->setNotchTarget(36);
         zDialRight->setNotchesVisible(false);
         zLabelCentimeters = new QLabel(groupBoxCurrentPosition);
         zLabelCentimeters->setObjectName(QString::fromUtf8("zLabelCentimeters"));
@@ -163,7 +165,7 @@ public:
         labelX->setAlignment(Qt::AlignCenter);
         labelZ = new QLabel(groupBoxCurrentPosition);
         labelZ->setObjectName(QString::fromUtf8("labelZ"));
-        labelZ->setGeometry(QRect(440, 300, 51, 16));
+        labelZ->setGeometry(QRect(430, 260, 51, 16));
         groupBoxHeadMountedDisplay = new QGroupBox(centralWidget);
         groupBoxHeadMountedDisplay->setObjectName(QString::fromUtf8("groupBoxHeadMountedDisplay"));
         groupBoxHeadMountedDisplay->setGeometry(QRect(10, 10, 131, 141));
