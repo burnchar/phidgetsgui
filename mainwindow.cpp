@@ -9,17 +9,6 @@
 */
 
 
-/*
-  Originally went with a "Take reporcted max/minval and apply a 5% tolerance",
-  but this didn't work. Some servos would have needed as much as a 40% tolerance
-  to input values, even though the actual range across the small input range was
-  the same about 180 degrees.
-
-  The window can potentially be resized to any size, to angles for the Z display
-  are derived from the exact widget positions relative to each other.
-
-  */
-
 #include "mainwindow.h"
 
 
@@ -224,12 +213,7 @@ void MainWindow::newSession()
 		sessionTimer->start(100);
 		QTimer::singleShot(75, this, SLOT(setSessionActive(void)));
 		resetControls();
-		//|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-
-		hmdTimer->start(25);
-
-		//|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-
+		hmdTimer->start(20);
 	}
 	this->sessionPaused = false;
 }
@@ -264,7 +248,7 @@ void MainWindow::finalizeSession()
 }
 
 
-//! Called once per second to update the "session elapsed time" label
+//! Called to update the "session elapsed time" label
 void MainWindow::updateSessionElapsedTime()
 {
 	static const int secondsPerHour = 3600;
@@ -287,25 +271,39 @@ void MainWindow::updateSessionElapsedTime()
 	ui->labelZLogs->setText(labelText);
 }
 
-//! Called to update most recent
+//! Called to update to most recent headset position via Free-Track
 void MainWindow::updateHmdPositionData()
 {
 	float pitch, yaw, ipitch, iyaw;
-
+	static bool freeTrackError;
 	if(ui->radioButton_fromHMD->isChecked() && this->sessionActive && !sessionPaused) {
 		if(hmd->updateData()) {
 			pitch = hmd->getPitch();
 			yaw = hmd->getYaw();
+
+			// Interpolated pitch (ipitch) and yaw. These probably should be
+			// read from a file or from some kind of calibration routine, but
+			// time was limited so, for now, the values are hard-coded.
 			ipitch = interpolate(pitch, -0.31f, 0.05f, -15.0f, 15.0f);
-			iyaw = interpolate(yaw, -0.35f, 0.25f, -20.0f, 20.0f);
-			//qDebug() << "Pitch:" << ipitch << "  Raw pitch: " << pitch;
-			//qDebug() << "  Yaw:" << iyaw   << "    Raw yaw: " << yaw;
+			iyaw =   interpolate(yaw,   -0.35f, 0.25f, -20.0f, 20.0f);
+			qDebug() << "Pitch:" << ipitch << "  Raw pitch: " << pitch;
+			qDebug() << "  Yaw:" << iyaw   << "    Raw yaw: " << yaw;
+			ui->labelServoMovements->setText(QString("P: %1,   Y: %2").arg(pitch).arg(yaw));
+
+
 			servos->setAngle(servo_y_index, -ipitch);
 			servos->setAngle(servo_x_index, -iyaw);
-			//ui->xPositionControl->setAngle(iyaw);
-			//ui->yPositionSlider->setValue(ipitch);
 		}
-		//else qDebug() << "FreeTrack isn't providing position data.";
+
+		// If FreeTrack is not return any information, display an error once.
+		else if(freeTrackError == false) {
+			QString errorMsg = QString("I tried asking Free-Track for position information, but it didn't answer.\nPlease make sure that Free-Track is running, that it is tracking (you should be able to see movement in its 'cam' window), and that your headset is powered up. Then, restart this program.");
+			qDebug() << errorMsg;
+			QMessageBox msgBox;
+			msgBox.setText(errorMsg);
+			msgBox.exec();
+			freeTrackError = true;
+		}
 	}
 }
 
@@ -318,7 +316,7 @@ void MainWindow::resetControls()
 }
 
 
-// Used as a slot for delayed or timed changes to session active status
+//! Used as a slot for delayed or timed changes to session active status
 void MainWindow::setSessionActive()
 {
 	this->sessionActive = true;
@@ -406,7 +404,6 @@ void MainWindow::onZControlChange(int sliderValue)
 
 	if(this->sessionActive) {
 		servos->setAngle(servo_w_index, 180.0 - theta);
-		//qDebug() <<theta;
 	}
 }
 
