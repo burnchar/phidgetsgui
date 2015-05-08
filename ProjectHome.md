@@ -1,0 +1,3 @@
+Original use: This program was the software part of a university project whose purpose was to remotely operate a radioactive "hot cell" robot. The X and Y servos of the robot (look left/right and up/down) are operated using a head-mounted motion-tracking system. An additional servo, Y, was used to adjust camera relative angles based on object distance, simulating depth perception using an HMD with dual independent displays. The use of the underlying code is not limited to the program's original purpose.
+
+Uses: Phidgets libraries, FreeTrack, and Qt.
